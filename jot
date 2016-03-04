@@ -418,8 +418,8 @@ def bookmark(url, tags, title, notes, archive, fetch_title, editor):
 
 
 @cli.command(short_help='edit existing bookmarks')
-@click.argument('terms', nargs=-1, default='*', required=False)
-def edit(terms):
+@click.argument('terms', nargs=-1, required=False)
+def edit(terms='*'):
     mset = search_terms(terms)
     docs = [m.document for m in mset]
     newdocs = editor(docs2yaml(docs))
@@ -430,8 +430,8 @@ def edit(terms):
 
 
 @cli.command(short_help='delete bookmarks')
-@click.argument('terms', nargs=-1, default='*', required=False)
-def delete(terms):
+@click.argument('terms', nargs=-1, required=False)
+def delete(terms='*'):
     mset = search_terms(terms)
     if len(mset) < 1:
         print('No matches.')
@@ -451,8 +451,8 @@ def delete(terms):
 
 
 @cli.command(short_help='take webpage snapshots')
-@click.argument('terms', nargs=-1, default='*', required=False)
-def archive(terms):
+@click.argument('terms', nargs=-1, required=False)
+def archive(terms='*'):
     """Archive bookmarks matching the given search terms."""
     mset = search_terms(terms)
     docs = []
@@ -473,8 +473,8 @@ def archive(terms):
 
 
 @cli.command(short_help='view webpage snapshots')
-@click.argument('terms', nargs=-1, default='*', required=False)
-def view(terms):
+@click.argument('terms', nargs=-1, required=False)
+def view(terms='*'):
     mset = search_terms(terms)
     args = [PNGVIEW]
     for m in mset:
@@ -491,10 +491,10 @@ def view(terms):
 
 
 @cli.command(short_help='search bookmarks')
-@click.argument('terms', nargs=-1, default='*', required=False)
 @click.option('--format', default=default_formatstr,
     help='Configure the display of search results.')
-def search(terms, format):
+@click.argument('terms', nargs=-1, required=False)
+def search(format, terms='*'):
     """List bookmarks matching the given search terms."""
     mset = search_terms(terms)
     docs = [m.document for m in mset]
@@ -502,17 +502,17 @@ def search(terms, format):
 
 
 @cli.command(short_help='count bookmarks')
-@click.argument('terms', nargs=-1, default='*', required=False)
-def count(terms):
+@click.argument('terms', nargs=-1, required=False)
+def count(terms='*'):
     """Count bookmarks matching the given search terms."""
     mset = search_terms(terms)
     print(len(mset))
 
 
 @cli.command('random', short_help='pick a random bookmark')
-@click.argument('terms', nargs=-1, default='*', required=False)
 @click.option('--format', default=default_formatstr)
-def jotrandom(terms, format):
+@click.argument('terms', nargs=-1, required=False)
+def jotrandom(format, terms='*'):
     """Pick a random bookmark matching the given search terms."""
     mset = search_terms(terms)
     m = random.SystemRandom().choice(mset)
@@ -520,9 +520,9 @@ def jotrandom(terms, format):
 
 
 @cli.command(short_help='dump bookmarks as yaml')
-@click.argument('terms', nargs=-1, default='*', required=False)
 @click.option('--dump-terms', is_flag=True, help='Include Xapian terms in dump.')
-def dump(terms, dump_terms):
+@click.argument('terms', nargs=-1, required=False)
+def dump(dump_terms, terms='*'):
     """Create a YAML dump of bookmarks matching the given search terms."""
     mset = search_terms(terms)
     ds = []
